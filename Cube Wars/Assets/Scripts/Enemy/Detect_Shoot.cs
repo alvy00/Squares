@@ -37,7 +37,7 @@ public class Detect_Shoot : MonoBehaviour
 
     private bool detected = false;
 
-    public bool canShoot = true;
+    private bool canShoot = true;
 
 
     void Awake()
@@ -48,7 +48,6 @@ public class Detect_Shoot : MonoBehaviour
         foreach(GameObject go in allPlayerGameObject)
         {
             allPlayersPos.Add(go.transform);
-            Debug.Log(go.transform.position);
         }
     }
 
@@ -85,14 +84,17 @@ public class Detect_Shoot : MonoBehaviour
             {
                 detected = true;
                 
-            }else
-            {
+            }else{
+
                 detected = false;
             }
         } //------------------------------------------------------------------
 
         if(detected)
         {
+            // DISABLE MOVING TOWARDS PLAYERS
+            aiPath.enabled = false;
+            
             // SHOOT    
             if(canShoot)
             {
@@ -116,10 +118,11 @@ public class Detect_Shoot : MonoBehaviour
                     default:
                         break;
                 }
-
-                
             }
+
         }
+
+        aiPath.enabled = true;
     }
 
     void AimShoot()
@@ -196,7 +199,6 @@ public class Detect_Shoot : MonoBehaviour
 
         return visibleTargets;
     }
-
 
     Transform GetClosestEnemy (List<Transform> players)
     {

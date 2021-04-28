@@ -173,6 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathEffect: {fileID: 7755053258760468652, guid: afe811fbc4b4bcb42b57571f6a75356f,
     type: 3}
+  detect_Shoot: []
   health: 185
 --- !u!114 &92243304321228737
 MonoBehaviour:
@@ -321,7 +322,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   range: 12.5
-  fireRate: 2
+  weapon: 3
+  timeBetweenEachBurst: 1.8
+  bulletsToShoot: 0
   spread: 1
   bulletForce: 7
   shotPointLocalPosX: 1.33

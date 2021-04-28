@@ -126,8 +126,10 @@ GameObject:
   - component: {fileID: 6897609198389983066}
   - component: {fileID: 2035468178}
   - component: {fileID: 8343028829182902007}
-  - component: {fileID: 5758949928644182398}
+  - component: {fileID: -6482727160925550155}
   - component: {fileID: -713526327179136257}
+  - component: {fileID: 4565371864571874564}
+  - component: {fileID: -167968523045112658}
   m_Layer: 9
   m_Name: Green Enemy
   m_TagString: Enemy
@@ -280,14 +282,14 @@ MonoBehaviour:
   deathEffect: {fileID: 4732424228689320434, guid: 371ca6b37b7aac14eaf3ffce34500b82,
     type: 3}
   health: 100
---- !u!114 &5758949928644182398
+--- !u!114 &-6482727160925550155
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7888837230980089344}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e7d4458eb6536bb419c0e5a41bcad111, type: 3}
   m_Name: 
@@ -305,14 +307,14 @@ MonoBehaviour:
     m_Bits: 6400
   playerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   range: 12.5
-  weapon: 0
+  weapon: 1
   timeBetweenEachBurst: 1.8
-  bulletsToShoot: 0
+  bulletsToShoot: 3
   spread: 1
   bulletForce: 7
   shotPointLocalPosX: 1.29
@@ -334,3 +336,67 @@ MonoBehaviour:
   speed: 0
   stoppingDistance: 0
   retreatDistance: 0
+--- !u!114 &4565371864571874564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7888837230980089344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  drawGizmos: 1
+  detailedGizmos: 0
+  startEndModifier:
+    addPoints: 0
+    exactStartPoint: 3
+    exactEndPoint: 3
+    useRaycasting: 0
+    mask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    useGraphRaycasting: 0
+  traversableTags: -1
+  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  graphMask:
+    value: -1
+--- !u!114 &-167968523045112658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7888837230980089344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6eb1402c17e84a9282a7f0f62eb584f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 2
+  radius: 0.25
+  height: 2
+  repathRate: 0.2
+  canSearch: 1
+  canMove: 1
+  maxSpeed: 5
+  gravity: {x: NaN, y: NaN, z: NaN}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  centerOffsetCompatibility: NaN
+  orientation: 1
+  enableRotation: 0
+  targetCompatibility: {fileID: 0}
+  maxAcceleration: -2.5
+  rotationSpeed: 360
+  slowdownDistance: 15
+  pickNextWaypointDist: 1
+  endReachedDistance: 0.1
+  alwaysDrawGizmos: 0
+  slowWhenNotFacingTarget: 1
+  whenCloseToDestination: 0
+  constrainInsideGraph: 0

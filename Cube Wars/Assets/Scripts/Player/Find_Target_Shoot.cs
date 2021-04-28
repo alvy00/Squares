@@ -21,8 +21,10 @@ public class Find_Target_Shoot : MonoBehaviour
 
     public float range;
 
-    public float fireRate;
-    private float nextTimeToFire = 0;
+    public int weapon;
+    public float timeBetweenEachBurst = 1.8f;
+    private float timeBetweenEachBullet = 0.1f;
+    public float bulletsToShoot;
     public float spread;
     public float bulletForce;
 
@@ -32,6 +34,7 @@ public class Find_Target_Shoot : MonoBehaviour
 
     private bool detected = false;
 
+    private bool canShoot = true;
 
     void Update()
     {
@@ -65,13 +68,29 @@ public class Find_Target_Shoot : MonoBehaviour
         if(detected)
         {
             // SHOOT    
-            if(Time.time > nextTimeToFire)
+            if(canShoot)
             {
-                nextTimeToFire = Time.time+1 / fireRate;
-                AimShoot();
-            }
-
-            
+                switch(weapon)
+                {
+                    case 1:
+                        Pistol();
+                        canShoot = false;
+                        Invoke("Reload", 1f); 
+                        break;
+                    case 2:
+                        SMG();
+                        canShoot = false;
+                        Invoke("Reload", 1.8f);
+                        break;
+                    case 3:
+                        MG();
+                        canShoot = false;
+                        Invoke("Reload", 4.5f);
+                        break;
+                    default:
+                        break;
+                }
+            }     
         }
     }
 
@@ -96,6 +115,37 @@ public class Find_Target_Shoot : MonoBehaviour
         Vector2 norDir = direction + new Vector2(x, y);
         norDir.Normalize();
         bulletIns.GetComponent<Rigidbody2D>().AddForce(norDir * bulletForce * 100);
+    }
+
+    //........................... GUNS ...........................
+    void Pistol()
+    {
+        Invoke("AimShoot", 0.2f);
+    }
+    void SMG()
+    {
+        Invoke("AimShoot", 0.2f);
+        Invoke("AimShoot", 0.35f);
+        Invoke("AimShoot", 0.55f);
+        Invoke("AimShoot", 0.75f);
+    }
+    void MG()
+    {
+        Invoke("AimShoot", 0.2f);
+        Invoke("AimShoot", 0.35f);
+        Invoke("AimShoot", 0.55f);
+        Invoke("AimShoot", 0.75f);
+        Invoke("AimShoot", 0.95f);
+        Invoke("AimShoot", 1.1f);
+        Invoke("AimShoot", 1.35f);
+        Invoke("AimShoot", 1.55f);
+        Invoke("AimShoot", 1.75f);
+    }
+    //........................... GUNS ...........................
+
+    void Reload()
+    {
+        canShoot = true;
     }
 
     List<Transform> FindVisibleTargets()

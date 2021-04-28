@@ -5,19 +5,24 @@ using UnityEngine;
 public class Health_System_Player : MonoBehaviour
 {
     public GameObject deathEffect;
-    private GameObject enemy;
-    public Detect_Shoot detect_Shoot;
+    private GameObject[] enemies;
+    public List<Detect_Shoot> detect_Shoot;
 
     public float health;
     
     void Awake()
     {
-        enemy = GameObject.FindGameObjectWithTag("Enemy");
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-        if(enemy != null)
+        if(enemies != null)
         {
-            detect_Shoot = enemy.GetComponent<Detect_Shoot>();
+            foreach(GameObject go in enemies)
+            {
+                detect_Shoot.Add(go.GetComponent<Detect_Shoot>());
+            }
         }
+
+        Debug.Log(enemies.Length);
 
     }
 
@@ -25,7 +30,12 @@ public class Health_System_Player : MonoBehaviour
     {
         if(health <= 0)
         {
-            detect_Shoot.allPlayersPos.Remove(gameObject.transform);
+            foreach(Detect_Shoot ds in detect_Shoot)
+            {
+                ds.allPlayersPos.Remove(gameObject.transform);
+            }
+
+
             Instantiate(deathEffect, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
