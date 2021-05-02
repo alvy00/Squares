@@ -227,9 +227,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 2
-  radius: 0.3
+  radius: 0.6
   height: 2
-  repathRate: 0.5
+  repathRate: 0.3
   canSearch: 1
   canMove: 1
   maxSpeed: 7
@@ -326,7 +326,7 @@ MonoBehaviour:
   timeBetweenEachBurst: 1.8
   bulletsToShoot: 0
   spread: 1
-  bulletForce: 7
+  bulletForce: 15
   shotPointLocalPosX: 1.33
   shotPointLocalPosY: 0.47
 --- !u!1 &6970119273863170147

@@ -102,9 +102,8 @@ MonoBehaviour:
   whatIsSolid:
     serializedVersion: 2
     m_Bits: 5888
-  speed: 17
   lifeTime: 3
-  damage: 50
+  damage: 35
 --- !u!114 &9042697639278600635
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -22,7 +22,7 @@ public class Health_System_Player : MonoBehaviour
             }
         }
 
-        Debug.Log(enemies.Length);
+        //Debug.Log(enemies.Length);
 
     }
 

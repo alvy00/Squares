@@ -11,14 +11,22 @@ public class RTS_Movement : MonoBehaviour
     private Vector3 startPosition;
     
 
-    private float doubleClickTime = 0.4f;
-    private float lastClickTime;
+    float _threshold = 0.25f;
+
+    public bool ignoreCollisionPlayers = true;
+    public bool ignoreCollisionEnemies = true;
+
+
+    //private bool doubleClicked = false;
 
     void Awake()
     {
-        Physics2D.IgnoreLayerCollision(11, 11, true);
+        Physics2D.IgnoreLayerCollision(11, 11, ignoreCollisionPlayers);
+        Physics2D.IgnoreLayerCollision(9, 9, ignoreCollisionEnemies);
 
         selectedPlayersList = new List<PlayerRTS>();
+
+        //StartCoroutine ("DoubleClick");
     }
 
 
@@ -30,72 +38,19 @@ public class RTS_Movement : MonoBehaviour
             startPosition = UtilsClass.GetMouseWorldPosition();
 
             selectionAreaTransform.gameObject.SetActive(true);
-
-            // Collider2D[] collider2DArray =  Physics2D.OverlapAreaAll(startPosition, UtilsClass.GetMouseWorldPosition());
-            // // Deselect
-            // foreach(PlayerRTS playerRTS in selectedPlayersList)
-            // {
-            //     playerRTS.SetSelectedVisible(false);
-            // }
-
-            // // Select
-            // selectedPlayersList.Clear();
-            // foreach(Collider2D collider2D in collider2DArray)
-            // {
-            //     PlayerRTS playerRTS = collider2D.GetComponent<PlayerRTS>();
-            //     if(playerRTS != null)
-            //     {
-            //         playerRTS.SetSelectedVisible(true);
-            //         selectedPlayersList.Add(playerRTS);
-            //     }
-            // } 
-
-            //Debug.Log(selectedPlayersList.Count);
+            selectionAreaTransform.position = startPosition;
         }
 
         if(Input.GetMouseButton(0))
         {
-            Vector3 currentMousePos = UtilsClass.GetMouseWorldPosition();
-            Vector3 lowerLeft = new Vector3(Mathf.Min(startPosition.x, currentMousePos.x), Mathf.Min(startPosition.y, currentMousePos.y));
-            Vector3 upperRight = new Vector3(Mathf.Max(startPosition.x, currentMousePos.x), Mathf.Max(startPosition.y, currentMousePos.y));
-        
-            selectionAreaTransform.position = lowerLeft;
-            selectionAreaTransform.localScale = upperRight - lowerLeft;
-
-            if(DoubleClick())
-            {
-                Vector3 moveToPos = UtilsClass.GetMouseWorldPosition();
-                List<Vector3> targetPosList = GetPosListAround(moveToPos, new float[]{3f}, new int[]{selectedPlayersList.Count -1});
-
-                int targetPosListIndex = 0;
-
-                foreach(PlayerRTS playerRTS in selectedPlayersList)
-                {
-                    playerRTS.MoveTo(targetPosList[targetPosListIndex]);
-                    targetPosListIndex = (targetPosListIndex + 1) % targetPosList.Count;
-                }
-            }
-            
-            // Vector3 currentMousePos = UtilsClass.GetMouseWorldPosition();
-            // Vector3 lowerLeft = new Vector3(Mathf.Min(startPosition.x, currentMousePos.x), Mathf.Min(startPosition.y, currentMousePos.y));
-            // Vector3 upperRight = new Vector3(Mathf.Max(startPosition.x, currentMousePos.x), Mathf.Max(startPosition.y, currentMousePos.y));
-       
-            // selectionAreaTransform.position = lowerLeft;
-            // selectionAreaTransform.localScale = upperRight - lowerLeft;
+            // SELECTION AREA
+            Vector3 selectionAreaSize = UtilsClass.GetMouseWorldPosition() - startPosition;
+            selectionAreaTransform.localScale = selectionAreaSize;
         }
 
         if(Input.GetMouseButtonUp(0))
         {
             selectionAreaTransform.gameObject.SetActive(false);
-
-            // Vector3 moveToPosition = UtilsClass.GetMouseWorldPosition();
-
-            // // Touch lifted
-            // foreach(PlayerRTS playerRTS in selectedPlayersList)
-            // {
-            //     playerRTS.SetSelectedVisible(false);
-            //     playerRTS.MoveTo(moveToPosition);
-            // }
 
             Collider2D[] collider2DArray =  Physics2D.OverlapAreaAll(startPosition, UtilsClass.GetMouseWorldPosition());
             
@@ -122,17 +77,95 @@ public class RTS_Movement : MonoBehaviour
             //Debug.Log(UtilsClass.GetMouseWorldPosition() + " "  + startPosition); 
         }
 
+
+
+       if(Input.GetMouseButton(0))
+        {
+            Vector3 moveToPos = UtilsClass.GetMouseWorldPosition();
+            List<Vector3> targetPosList = GetPosListAround(moveToPos, new float[]{3f}, new int[]{selectedPlayersList.Count -1});
+
+            int targetPosListIndex = 0;
+
+            foreach(PlayerRTS playerRTS in selectedPlayersList)
+            {
+                playerRTS.MoveTo(targetPosList[targetPosListIndex]);
+                targetPosListIndex = (targetPosListIndex + 1) % targetPosList.Count;
+            }
+
+            // if(doubleClicked)
+            // {
+            //     Vector3 moveToPos = UtilsClass.GetMouseWorldPosition();
+            //     List<Vector3> targetPosList = GetPosListAround(moveToPos, new float[]{3f}, new int[]{selectedPlayersList.Count -1});
+
+            //     int targetPosListIndex = 0;
+
+            //     foreach(PlayerRTS playerRTS in selectedPlayersList)
+            //     {
+            //         playerRTS.MoveTo(targetPosList[targetPosListIndex]);
+            //         targetPosListIndex = (targetPosListIndex + 1) % targetPosList.Count;
+            //     }
+            // }
+        }
+
     }
 
-    bool DoubleClick()
+    void Move()
     {
-        float timeSinceLastClick = Time.time - lastClickTime;
-        if(timeSinceLastClick <= doubleClickTime){ return true; }
+        // if(DoubleClick())
+        //     {
+        //         Vector3 moveToPos = UtilsClass.GetMouseWorldPosition();
+        //         List<Vector3> targetPosList = GetPosListAround(moveToPos, new float[]{3f}, new int[]{selectedPlayersList.Count -1});
 
-        lastClickTime = Time.time;
+        //         int targetPosListIndex = 0;
 
-        return false;
+        //         foreach(PlayerRTS playerRTS in selectedPlayersList)
+        //         {
+        //             playerRTS.MoveTo(targetPosList[targetPosListIndex]);
+        //             targetPosListIndex = (targetPosListIndex + 1) % targetPosList.Count;
+        //         }
+        //     }
+
+        Vector3 moveToPos = UtilsClass.GetMouseWorldPosition();
+        List<Vector3> targetPosList = GetPosListAround(moveToPos, new float[]{3f}, new int[]{selectedPlayersList.Count -1});
+
+        int targetPosListIndex = 0;
+
+        foreach(PlayerRTS playerRTS in selectedPlayersList)
+        {
+            playerRTS.MoveTo(targetPosList[targetPosListIndex]);
+            targetPosListIndex = (targetPosListIndex + 1) % targetPosList.Count;
+        }
     }
+
+    // IEnumerator DoubleClick()
+    // {
+    //     while (true) 
+    //     {
+    //         float duration = 0;
+    //         if (Input.GetMouseButtonDown (0)) 
+    //         {
+    //             while (duration < _threshold) 
+    //             {
+    //                 duration += Time.deltaTime;
+    //                 yield return new WaitForSeconds (0.005f);
+    //                 if (Input.GetMouseButtonDown (0)) 
+    //                 {
+    //                     doubleClicked = true;
+    //                     duration = _threshold;
+    //                     // Double click/tap
+    //                     Debug.Log("Double Click detected");
+    //                 }
+    //             }
+
+    //             if (!doubleClicked) 
+    //             {
+    //                 // Single click/tap
+    //                 Debug.Log("Single Click detected");
+    //             }
+    //         }
+    //         yield return null;
+    //     }
+    // }
 
     List<Vector3> GetPosListAround(Vector3 startPos, float[] ringDistanceArray, int[] ringPosCountArray)
     {

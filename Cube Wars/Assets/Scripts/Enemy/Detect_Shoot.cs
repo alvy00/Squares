@@ -25,11 +25,14 @@ public class Detect_Shoot : MonoBehaviour
     public float range;
 
     public int weapon;
-    public float timeBetweenEachBurst = 1.8f;
     private float timeBetweenEachBullet = 0.1f;
     public float bulletsToShoot;
     public float spread;
     public float bulletForce;
+
+    private float pistol = 1f;
+    private float smg = 1.8f;
+    private float mg = 4.5f;
 
     public float shotPointLocalPosX;
     public float shotPointLocalPosY;
@@ -40,7 +43,7 @@ public class Detect_Shoot : MonoBehaviour
     private bool canShoot = true;
 
 
-    void Awake()
+    void Start()
     {
         aiPath = GetComponent<AIPath>();
 
@@ -49,6 +52,8 @@ public class Detect_Shoot : MonoBehaviour
         {
             allPlayersPos.Add(go.transform);
         }
+
+        //Debug.Log(allPlayersPos.Count);
     }
 
 
@@ -57,7 +62,8 @@ public class Detect_Shoot : MonoBehaviour
         // FINDS THE CLOSEST PLAYER TO MOVE TO
         if(allPlayersPos != null)
         {
-            MoveTowardsClosestPlayer(GetClosestEnemy(allPlayersPos));
+            //MoveTowardsClosestPlayer(GetClosestEnemy(allPlayersPos));
+            MoveTowardsClosestPlayer(FindClosestEnemy());
         }
 
 
@@ -65,6 +71,7 @@ public class Detect_Shoot : MonoBehaviour
         targetsFound = FindVisibleTargets();
         if(targetsFound == null) { return; }
         target = GetClosestEnemy(targetsFound);
+        //target = FindClosestEnemy();
         if(target == null) { return; }
 
 
@@ -103,17 +110,17 @@ public class Detect_Shoot : MonoBehaviour
                     case 1:
                         Pistol();
                         canShoot = false;
-                        Invoke("Reload", 1f);
+                        Invoke("Reload", Random.Range(pistol, pistol+0.3f));
                         break;
                     case 2:
                         SMG();
                         canShoot = false;
-                        Invoke("Reload", 1.8f);
+                        Invoke("Reload", Random.Range(smg, smg+0.3f));
                         break;
                     case 3:
                         MG();
                         canShoot = false;
-                        Invoke("Reload", 4.5f);
+                        Invoke("Reload", Random.Range(mg, mg+0.3f));
                         break;
                     default:
                         break;
@@ -200,7 +207,7 @@ public class Detect_Shoot : MonoBehaviour
         return visibleTargets;
     }
 
-    Transform GetClosestEnemy (List<Transform> players)
+    Transform GetClosestEnemy(List<Transform> players)
     {
         Transform bestTarget = null;
         float closestDistanceSqr = Mathf.Infinity;
@@ -217,6 +224,27 @@ public class Detect_Shoot : MonoBehaviour
         }
      
         return bestTarget;
+    }
+
+    Transform FindClosestEnemy() 
+    {
+        GameObject[] gos;
+        gos = GameObject.FindGameObjectsWithTag("Player");
+        GameObject closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach (GameObject go in gos) 
+        {
+            Vector3 diff = go.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if (curDistance < distance) 
+            {
+                closest = go;
+                distance = curDistance;
+            }
+        }
+        
+        return closest.transform;
     }
 
     void MoveTowardsClosestPlayer(Transform transform)

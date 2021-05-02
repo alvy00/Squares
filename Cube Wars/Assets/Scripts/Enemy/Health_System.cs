@@ -9,7 +9,7 @@ public class Health_System : MonoBehaviour
 
     public float health;
     
-
+    
     void Update()
     {
         if(health <= 0)
