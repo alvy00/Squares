@@ -34,6 +34,9 @@ public class Detect_Shoot : MonoBehaviour
     private float smg = 1.8f;
     private float mg = 4.5f;
 
+    public float gunLocalPosX;
+    public float gunLocalPosY;
+
     public float shotPointLocalPosX;
     public float shotPointLocalPosY;
 
@@ -100,7 +103,8 @@ public class Detect_Shoot : MonoBehaviour
         if(detected)
         {
             // DISABLE MOVING TOWARDS PLAYERS
-            aiPath.enabled = false;
+            //aiPath.enabled = false;
+            //aiPath.target = null;
             
             // SHOOT    
             if(canShoot)
@@ -129,7 +133,7 @@ public class Detect_Shoot : MonoBehaviour
 
         }
 
-        aiPath.enabled = true;
+        //aiPath.enabled = true;
     }
 
     void AimShoot()
@@ -141,10 +145,12 @@ public class Detect_Shoot : MonoBehaviour
             gun.transform.right = direction;
             if(gun.transform.rotation.z < 0.7 && gun.transform.rotation.z > -0.7)
             {
+                gun.transform.localPosition = new Vector3(gunLocalPosX, gunLocalPosY, 0);
                 shotPoint.localPosition = new Vector3(shotPointLocalPosX, shotPointLocalPosY, 0);
                 gunSpriteRenderer.flipY = false;
             }else
             {
+                gun.transform.localPosition = new Vector3(-gunLocalPosX, gunLocalPosY, 0);
                 shotPoint.localPosition = new Vector3(shotPointLocalPosX, -shotPointLocalPosY, 0);
                 gunSpriteRenderer.flipY = true;
             }
@@ -231,8 +237,11 @@ public class Detect_Shoot : MonoBehaviour
         GameObject[] gos;
         gos = GameObject.FindGameObjectsWithTag("Player");
         GameObject closest = null;
+
         float distance = Mathf.Infinity;
         Vector3 position = transform.position;
+
+        
         foreach (GameObject go in gos) 
         {
             Vector3 diff = go.transform.position - position;

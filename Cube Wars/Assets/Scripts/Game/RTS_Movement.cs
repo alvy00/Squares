@@ -13,11 +13,10 @@ public class RTS_Movement : MonoBehaviour
 
     float _threshold = 0.25f;
 
+    //private bool doubleClicked = false;
+
     public bool ignoreCollisionPlayers = true;
     public bool ignoreCollisionEnemies = true;
-
-
-    //private bool doubleClicked = false;
 
     void Awake()
     {
@@ -82,59 +81,34 @@ public class RTS_Movement : MonoBehaviour
        if(Input.GetMouseButton(0))
         {
             Vector3 moveToPos = UtilsClass.GetMouseWorldPosition();
-            List<Vector3> targetPosList = GetPosListAround(moveToPos, new float[]{3f}, new int[]{selectedPlayersList.Count -1});
 
-            int targetPosListIndex = 0;
-
-            foreach(PlayerRTS playerRTS in selectedPlayersList)
-            {
-                playerRTS.MoveTo(targetPosList[targetPosListIndex]);
-                targetPosListIndex = (targetPosListIndex + 1) % targetPosList.Count;
-            }
-
-            // if(doubleClicked)
-            // {
-            //     Vector3 moveToPos = UtilsClass.GetMouseWorldPosition();
-            //     List<Vector3> targetPosList = GetPosListAround(moveToPos, new float[]{3f}, new int[]{selectedPlayersList.Count -1});
-
-            //     int targetPosListIndex = 0;
-
-            //     foreach(PlayerRTS playerRTS in selectedPlayersList)
-            //     {
-            //         playerRTS.MoveTo(targetPosList[targetPosListIndex]);
-            //         targetPosListIndex = (targetPosListIndex + 1) % targetPosList.Count;
-            //     }
-            // }
+            Move();
         }
 
     }
 
     void Move()
     {
-        // if(DoubleClick())
-        //     {
-        //         Vector3 moveToPos = UtilsClass.GetMouseWorldPosition();
-        //         List<Vector3> targetPosList = GetPosListAround(moveToPos, new float[]{3f}, new int[]{selectedPlayersList.Count -1});
-
-        //         int targetPosListIndex = 0;
-
-        //         foreach(PlayerRTS playerRTS in selectedPlayersList)
-        //         {
-        //             playerRTS.MoveTo(targetPosList[targetPosListIndex]);
-        //             targetPosListIndex = (targetPosListIndex + 1) % targetPosList.Count;
-        //         }
-        //     }
-
         Vector3 moveToPos = UtilsClass.GetMouseWorldPosition();
-        List<Vector3> targetPosList = GetPosListAround(moveToPos, new float[]{3f}, new int[]{selectedPlayersList.Count -1});
+        //List<Vector3> targetPosList = CircleFormation(moveToPos, 3f, selectedPlayersList.Count -1);
+        List<Vector3> targetPosList = SquareFormation(moveToPos, 1.5f,selectedPlayersList.Count);
+        //List<Vector3> targetPosList = LineFormationHorizontal(moveToPos, 1.5f, selectedPlayersList.Count);
+        //List<Vector3> targetPosList = LineFormationvertical(moveToPos, 1.5f, selectedPlayersList.Count);
+        //List<Vector3> targetPosList = NoFormation(moveToPos, 0.5f, selectedPlayersList.Count);
 
+
+        // MOVES THE PLAYERS TO ASSIGNED VECTOR3 POSITIONS
         int targetPosListIndex = 0;
-
         foreach(PlayerRTS playerRTS in selectedPlayersList)
         {
             playerRTS.MoveTo(targetPosList[targetPosListIndex]);
             targetPosListIndex = (targetPosListIndex + 1) % targetPosList.Count;
         }
+
+        // for(int i=0; i<targetPosList.Count; i++)
+        // {
+        //     Debug.Log(i + " " + targetPosList[i]);
+        // }
     }
 
     // IEnumerator DoubleClick()
@@ -167,21 +141,15 @@ public class RTS_Movement : MonoBehaviour
     //     }
     // }
 
-    List<Vector3> GetPosListAround(Vector3 startPos, float[] ringDistanceArray, int[] ringPosCountArray)
+
+    // ...................................PLAYER FORMATIONS...................................
+
+
+    List<Vector3> CircleFormation(Vector3 startPos, float distance, int posCount)
     {
         List<Vector3> posList = new List<Vector3>();
         posList.Add(startPos);
-        for(int i=0; i<ringDistanceArray.Length; i++)
-        {
-            posList.AddRange(GetPosListAround(startPos, ringDistanceArray[i], ringPosCountArray[i]));
-        }
 
-        return posList;
-    }
-
-    List<Vector3> GetPosListAround(Vector3 startPos, float distance, int posCount)
-    {
-        List<Vector3> posList = new List<Vector3>();
         for(int i=0; i<posCount; i++)
         {
             float angle = i * (360f / posCount);
@@ -192,6 +160,88 @@ public class RTS_Movement : MonoBehaviour
 
         return posList;
     }
+
+    List<Vector3> SquareFormation(Vector3 startPos,float distance,int playerSelectedCount)
+    {
+        List<Vector3> posList = new List<Vector3>();
+
+
+        int counter = 1;
+        int xoffset = 0;
+
+        float sqrt = Mathf.Sqrt(playerSelectedCount);
+        float startx = startPos.x;
+
+        for (int i = 0; i < playerSelectedCount; i++)
+        {
+
+            if (xoffset > Mathf.Floor(sqrt)-1)
+            {
+                xoffset = 0;
+            }
+
+            if (counter > Mathf.Floor(sqrt))
+            {
+                counter = 1;
+                
+                startPos.x = startx;
+                startPos.y -= 1.5f;
+            }
+
+            posList.Add(new Vector3(startPos.x + (xoffset*distance), startPos.y, 0f));
+
+            counter++;
+            xoffset++;
+
+        }
+
+        return posList;
+    }
+
+    List<Vector3> LineFormationHorizontal(Vector3 startPos, float distance,int playerSelectedCount)
+    {
+        List<Vector3> posList = new List<Vector3>();
+        //posList.Add(startPos);
+
+
+        for(int i=0; i<playerSelectedCount; i++)
+        {
+            posList.Add(new Vector3(startPos.x + (i*distance), startPos.y, 0));
+        }
+
+        return posList;
+    }
+
+    List<Vector3> LineFormationvertical(Vector3 startPos, float distance,int playerSelectedCount)
+    {
+        List<Vector3> posList = new List<Vector3>();
+        //posList.Add(startPos);
+
+
+        for(int i=0; i<playerSelectedCount; i++)
+        {
+            posList.Add(new Vector3(startPos.x, startPos.y  + (i*distance), 0));
+        }
+
+        return posList;
+    }
+
+    List<Vector3> NoFormation(Vector3 startPos, float distance,int playerSelectedCount)
+    {
+        List<Vector3> posList = new List<Vector3>();
+        //posList.Add(startPos);
+
+
+        for(int i=0; i<playerSelectedCount; i++)
+        {
+            posList.Add(new Vector3(startPos.x + (i * Random.Range(-distance, distance)), startPos.y  + (i * Random.Range(-distance, distance)), 0));
+        }
+
+        return posList;
+    }
+
+
+    //...................................PLAYER FORMATIONS...................................
 
     Vector3 ApplyRotationToVector(Vector3 vec,float angle)
     {

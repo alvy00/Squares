@@ -17,8 +17,9 @@ GameObject:
   - component: {fileID: -8028975763987595136}
   - component: {fileID: -3333062619459934717}
   - component: {fileID: 3814623793767566751}
+  - component: {fileID: 7831003817207506162}
   m_Layer: 9
-  m_Name: Red Enemy
+  m_Name: Red_Enemy_SMG
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -165,12 +166,14 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 4096
-  range: 12.5
-  weapon: 1
+  range: 15
+  weapon: 2
   bulletsToShoot: 3
   spread: 1
   bulletForce: 15
-  shotPointLocalPosX: 1.29
+  gunLocalPosX: 0.13
+  gunLocalPosY: -0.015
+  shotPointLocalPosX: 3.6
   shotPointLocalPosY: 0.54
 --- !u!114 &34726101
 MonoBehaviour:
@@ -264,11 +267,26 @@ MonoBehaviour:
   rotationSpeed: 360
   slowdownDistance: 15
   pickNextWaypointDist: 0.5
-  endReachedDistance: 0.1
+  endReachedDistance: 15
   alwaysDrawGizmos: 0
   slowWhenNotFacingTarget: 1
   whenCloseToDestination: 0
   constrainInsideGraph: 0
+--- !u!114 &7831003817207506162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3658045152058149651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a537d958aa5bb4f35b0d7b40d72278f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  penalty: 10
+  randomStep: 10
 --- !u!1 &4562162300346665682
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +311,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4562162300346665682}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.29, y: 0.54, z: 0}
+  m_LocalPosition: {x: 3.6, y: 0.54, z: 0}
   m_LocalScale: {x: 4.545454, y: 4.545454, z: 0}
   m_Children: []
   m_Father: {fileID: 8158991453525756790}
@@ -310,7 +328,7 @@ GameObject:
   - component: {fileID: 8158991453525756790}
   - component: {fileID: 3617511916659762089}
   m_Layer: 0
-  m_Name: pistol2
+  m_Name: gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -324,8 +342,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8223026222668424031}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_LocalPosition: {x: 0.13, y: -0.015, z: 0}
+  m_LocalScale: {x: 0.08359848, y: 0.08359848, z: 1}
   m_Children:
   - {fileID: 1698851230344032524}
   m_Father: {fileID: 3658045152058149647}
@@ -370,7 +388,7 @@ SpriteRenderer:
   m_SortingLayerID: 842314313
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f7a25cb0734e25047931f6be1c94b3ce, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a4106c3c24e25b74e99627cbd6117eca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

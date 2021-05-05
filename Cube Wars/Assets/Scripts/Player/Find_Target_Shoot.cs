@@ -27,6 +27,9 @@ public class Find_Target_Shoot : MonoBehaviour
     public float bulletsToShoot;
     public float spread;
     public float bulletForce;
+    
+    public float gunLocalPosX;
+    public float gunLocalPosY;
 
     public float shotPointLocalPosX;
     public float shotPointLocalPosY;
@@ -35,7 +38,9 @@ public class Find_Target_Shoot : MonoBehaviour
     private bool detected = false;
 
     private bool canShoot = true;
+    private bool canTurnGun = true;
 
+    
     void Update()
     {
         // FINDS CLOSEST TARGET
@@ -49,6 +54,8 @@ public class Find_Target_Shoot : MonoBehaviour
         spread = disToEnemy/10;
         
         // FINDS THE TARGET AND SHOOTS
+        if(!canTurnGun){ return; }
+
         Vector2 targetPos = target.position;
         direction = targetPos - (Vector2)transform.position;
 
@@ -103,10 +110,12 @@ public class Find_Target_Shoot : MonoBehaviour
             gun.transform.right = direction;
             if(gun.transform.rotation.z < 0.7 && gun.transform.rotation.z > -0.7)
             {
+                gun.transform.localPosition = new Vector3(gunLocalPosX, gunLocalPosY, 0);
                 shotPoint.localPosition = new Vector3(shotPointLocalPosX, shotPointLocalPosY, 0);
                 gunSpriteRenderer.flipY = false;
             }else
             {
+                gun.transform.localPosition = new Vector3(-gunLocalPosX, gunLocalPosY, 0);
                 shotPoint.localPosition = new Vector3(shotPointLocalPosX, -shotPointLocalPosY, 0);
                 gunSpriteRenderer.flipY = true;
             }
@@ -121,6 +130,8 @@ public class Find_Target_Shoot : MonoBehaviour
     void Pistol()
     {
         Invoke("AimShoot", 0.2f);
+        Invoke("PistolFireSound", 0.2f);
+        canTurnGun = false;
     }
     void SMG()
     {
@@ -128,6 +139,7 @@ public class Find_Target_Shoot : MonoBehaviour
         Invoke("AimShoot", 0.35f);
         Invoke("AimShoot", 0.55f);
         Invoke("AimShoot", 0.75f);
+        canTurnGun = false;
     }
     void MG()
     {
@@ -140,12 +152,23 @@ public class Find_Target_Shoot : MonoBehaviour
         Invoke("AimShoot", 1.35f);
         Invoke("AimShoot", 1.55f);
         Invoke("AimShoot", 1.75f);
+        canTurnGun = false;
     }
+
     //........................... GUNS ...........................
+
+    //..........................GUN SOUNDS ..............................
+    void PistolFireSound()
+    {
+        FindObjectOfType<AudioManager>().Play("PistolFireSound");
+    }
+    //..........................GUN SOUNDS ..............................
+    
 
     void Reload()
     {
         canShoot = true;
+        canTurnGun = true;
     }
 
     List<Transform> FindVisibleTargets()

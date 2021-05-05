@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 2097409985}
   - component: {fileID: -8897937190693850967}
   m_Layer: 11
-  m_Name: PlayerSquare1
+  m_Name: Player_Pistol
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -403,7 +403,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   range: 12.5
-  weapon: 3
+  weapon: 1
   timeBetweenEachBurst: 1.8
   bulletsToShoot: 0
   spread: 1
